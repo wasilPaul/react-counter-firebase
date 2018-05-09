@@ -4,18 +4,23 @@ import TextField from 'material-ui/TextField'
 
 class App extends Component {
   state = {
-    newTask: ''
+    newTask: '',
+    tasks: null
   }
 
   newTaskHendler = (e, task) => {
     this.setState(
       {
-        newTask: task
+        newTask: task,
       }
     )
   }
 
   componentDidMount() {
+    this.loadTask()
+  }
+
+  loadTask = () => {
     fetch('https://jfddl4-sandbox.firebaseio.com/pwasil/tasks/.json')
       .then(e => e.json())
       .then(data => {
@@ -25,7 +30,9 @@ class App extends Component {
             value: el[1]
           }))
         )
-        console.log(dataInArray)
+        this.setState({
+          tasks: dataInArray
+        })
       })
   }
 
@@ -40,8 +47,19 @@ class App extends Component {
       }
 
     )
+      .then(this.loadTask)
     this.setState({ newTask: '' })
   }
+
+  deleteTask = (taskUid) => {
+    fetch(
+      'https://jfddl4-sandbox.firebaseio.com/pwasil/tasks/' + taskUid +'/.json',
+      {
+        method: 'DELETE',
+      }
+    ).then(this.loadTask)
+  }
+
 
   render() {
     return (
@@ -56,6 +74,20 @@ class App extends Component {
           label={'Add Task'}
           onClick={this.saveTask}
         />
+
+        {
+
+          !this.state.tasks ?
+            'Ladowanie ..........' :
+            <ul>{
+              this.state.tasks.map(
+                task => <li 
+                onClick={()=>this.deleteTask(task.key)}
+                key={task.key}>{task.value} </li>
+              )
+            }
+            </ul>
+        }
       </div>
     )
   }
