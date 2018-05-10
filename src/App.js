@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
+import Chat from './components/Chat'
 import Counter from './components/Counter'
-
 class App extends Component {
-  render () {
-    return(
+  render() {
+    return (
       <div>
-      <Counter />
-
+        <Counter />
+        <Chat />
       </div>
     )
   }
