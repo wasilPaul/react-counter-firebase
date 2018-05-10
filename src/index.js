@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import Add from './toDO';
+import App from './Counter';
 
 ReactDOM.render(<MuiThemeProvider>
-    <Add />
+    <App />
 </MuiThemeProvider>, document.getElementById('root'))
