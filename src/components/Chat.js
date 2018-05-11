@@ -16,7 +16,7 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    database.ref('/chat').on('value', (snapshot) => {
+    database.ref('/chat').limitToLast(10).on('value', (snapshot) => {
       this.setState({
         messages: mapObjectToArray(snapshot.val()).reverse()
       })
@@ -26,10 +26,12 @@ class Chat extends React.Component {
   newMessageHendler = (e, value) => this.setState({ newMessage: value })
 
   addMessage = () => {
-    database.ref('/chat').push({
+    const newRefForMEssage = database.ref('/chat').push()
+    newRefForMEssage.set({
       message: this.state.newMessage,
       user: this.state.name,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      key: newRefForMEssage.key
     }).then(() => this.setState({ newMessage: '' }))
   }
 
