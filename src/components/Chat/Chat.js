@@ -15,7 +15,7 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    database.ref('/chat').limitToLast(10).on('value', (snapshot) => {
+    database.ref('/chat').limitToLast(100).on('value', (snapshot) => {
       this.setState({
         messages: mapObjectToArray(snapshot.val()).reverse()
       })
@@ -38,12 +38,13 @@ class Chat extends React.Component {
   render() {
     return (
       <div>
-        <ChatAppBar/>
+        <ChatAppBar />
         <TextField
           name='message'
           onChange={this.newMessageHendler}
           value={this.state.newMessage}
           fullWidth={true}
+          onKeyPress={(ev) => { if (ev.key === 'Enter') { this.addMessage() } }}
         />
         <RaiseButton
           onClick={this.addMessage}
@@ -57,9 +58,9 @@ class Chat extends React.Component {
               'Ladowanie ..........' :
               <div>
                 {this.state.messages.map(message => (
-                  <Message 
-                  key={message.key}
-                  message={message}/>
+                  <Message
+                    key={message.key}
+                    message={message} />
                 ))}
               </div>
           }
