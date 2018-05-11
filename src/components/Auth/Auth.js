@@ -1,6 +1,6 @@
 import React from 'react'
 import { auth } from '../../firebase'
-
+import LoginForms from './LoginForms'
 
 class Auth extends React.Component {
   state = {
@@ -26,7 +26,7 @@ class Auth extends React.Component {
           this.state.isLoggedIn ?
           this.props.children 
           :
-          'Zaloguj sie!'
+          <LoginForms />
         }
       </div>
     )

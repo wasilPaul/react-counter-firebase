@@ -1,16 +1,15 @@
 import React from 'react'
-import { database } from '../firebase'
-
-import { mapObjectToArray } from '../utils'
+import { database, auth } from '../../firebase'
+import { mapObjectToArray } from '../../utils'
 import TextField from 'material-ui/TextField'
 import RaiseButton from 'material-ui/RaisedButton'
-import MenuItem from 'material-ui/MenuItem'
-import moment from 'moment'
+
+import ChatAppBar from './ChatAppBar';
+import Message from './Message'
 
 
 class Chat extends React.Component {
   state = {
-    name: 'Paul \u00A9',
     newMessage: '',
     messages: null
   }
@@ -29,16 +28,19 @@ class Chat extends React.Component {
     const newRefForMEssage = database.ref('/chat').push()
     newRefForMEssage.set({
       message: this.state.newMessage,
-      user: this.state.name,
-      timestamp: Date.now(),
-      key: newRefForMEssage.key
+      user: auth.currentUser.displayName,
+      email: auth.currentUser.email,
+      avatar: auth.currentUser.photoURL,
+      timestamp: Date.now()
     }).then(() => this.setState({ newMessage: '' }))
   }
 
   render() {
     return (
       <div>
+        <ChatAppBar/>
         <TextField
+          name='message'
           onChange={this.newMessageHendler}
           value={this.state.newMessage}
           fullWidth={true}
@@ -55,12 +57,9 @@ class Chat extends React.Component {
               'Ladowanie ..........' :
               <div>
                 {this.state.messages.map(message => (
-                  <MenuItem key={message.key}>
-                    <span>
-                      ({moment(message.timestamp).format('HH:mm')}) </span>
-                    <b>{message.user}: </b>
-                    <span>{message.message}</span>
-                  </MenuItem>
+                  <Message 
+                  key={message.key}
+                  message={message}/>
                 ))}
               </div>
           }
