@@ -6,13 +6,14 @@ import PaperRefinder from '../../components/PaperRefined';
 const LoginByEmialAndPassword = (props) => (
     <PaperRefinder centered='true'>
         <TextField
-            name='email'
+            floatingLabelText='E-mail'            name='email'
             type={'email'}
             value={props.emailValue}
             onChange={props.onEmailChange}
             fullWidth={true}
         />
         <TextField
+            floatingLabelText='Password'
             name='password'
             type={'password'}
             value={props.passwordValue}
